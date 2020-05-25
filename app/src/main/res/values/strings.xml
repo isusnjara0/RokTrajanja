@@ -1,0 +1,37 @@
+<resources>
+    <string name="app_name">RokTrajanja</string>
+    <array name="dani">
+        <item>1 dan</item>
+        <item>2 dana</item>
+        <item>3 dana</item>
+    </array>
+
+    <array name="jedinica">
+        <item>g</item>
+        <item>kg</item>
+        <item>ml</item>
+        <item>l</item>
+        <item>kom</item>
+        <item>tucet</item>
+        <item>1/2</item>
+        <item>1/4</item>
+    </array>
+
+    <array name="lista">
+        <item>Proizvod1</item>
+        <item>Proizvod2</item>
+        <item>Proizvod3</item>
+    </array>
+
+    <array name="kolicina">
+        <item>2 kom</item>
+        <item>5 kg</item>
+        <item>1 l</item>
+    </array>
+
+    <array name="dana">
+        <item>2 d</item>
+        <item>12 d</item>
+        <item>20 d</item>
+    </array>
+</resources>

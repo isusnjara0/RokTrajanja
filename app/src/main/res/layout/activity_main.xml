@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#FFFFFF"
+    tools:context=".MainActivity">
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="notification"
+        android:text="Podjesti me za 10 sekundi" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="60dp"
+        app:srcCompat="@drawable/groceries"
+        tools:srcCompat="@drawable/groceries" />
+
+    <ImageButton
+        android:id="@+id/add"
+        android:onClick="dodaj"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/imageView"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="40dp"
+        android:background="#FFFFFF"
+        android:src="@drawable/add" />
+
+    <ImageButton
+        android:id="@+id/list"
+        android:onClick="list"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/add"
+        android:layout_marginTop="40dp"
+        android:background="#FFFFFF"
+        android:src="@drawable/list"/>
+    <ImageButton
+        android:id="@+id/settings"
+        android:onClick="settings"
+        android:layout_marginTop="40dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/list"
+        android:background="#FFFFFF"
+        android:src="@drawable/settings"/>
+
+    <EditText
+        android:id="@+id/seekBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/settings"
+        android:layout_marginStart="0dp"
+        android:layout_centerHorizontal="true"
+        />
+
+</RelativeLayout>
