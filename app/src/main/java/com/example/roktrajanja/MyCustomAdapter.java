@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -65,6 +66,7 @@ public class MyCustomAdapter extends ArrayAdapter<Proizvod> {
             }
             else{
                 datum.setText("ISTEKLO");
+                datum.setTextColor(Color.RED);
             }
         } catch (ParseException e) {
             e.printStackTrace();
