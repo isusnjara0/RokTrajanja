@@ -3,6 +3,7 @@ package com.example.roktrajanja;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +15,10 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class MyCustomAdapter extends ArrayAdapter<Proizvod> {
     Context mCtx;
@@ -43,17 +47,35 @@ public class MyCustomAdapter extends ArrayAdapter<Proizvod> {
         Proizvod proizvod = mList.get(position);
 
         naziv.setText(proizvod.naziv);
-        datum.setText(proizvod.datum);
-        slika.setImageDrawable(mCtx.getDrawable(proizvod.slika));
+
+        Calendar cal = Calendar.getInstance();
+        Calendar day = Calendar.getInstance();
+        try {
+            day.setTime(new SimpleDateFormat("dd.MM.yyyy").parse(proizvod.datum));
+            if(day.after(cal)){
+                datum.setText(day.get(Calendar.DAY_OF_MONTH)-(cal.get(Calendar.DAY_OF_MONTH))+" d");
+            }
+            else{
+                datum.setText("ISTEKLO");
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+
+
+        slika.setImageBitmap(BitmapFactory.decodeByteArray(proizvod.slika,0,proizvod.getSlika().length));
+        final int id = proizvod.id;
 
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getContext(), ProductInfo.class);
-                intent.putExtra("id", position+1);
+                intent.putExtra("id", id);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 getContext().startActivity(intent);
-                //((Activity)mCtx).finish();
+                ((Activity) mCtx).finish();
+                getContext().startActivity(((Activity) mCtx).getIntent());
             }
 
         });

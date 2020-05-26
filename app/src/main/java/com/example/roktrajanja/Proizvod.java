@@ -2,21 +2,31 @@ package com.example.roktrajanja;
 
 public class Proizvod {
 
-    int slika;
+    int id;
+    byte[] slika;
 
     String naziv,datum;
 
-    public Proizvod(int slika, String naziv, String datum) {
+    public Proizvod(int id, byte[] slika, String naziv, String datum) {
+        this.id = id;
         this.slika = slika;
         this.naziv = naziv;
         this.datum = datum;
     }
 
-    public int getSlika() {
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public byte[] getSlika() {
         return slika;
     }
 
-    public void setSlika(int slika) {
+    public void setSlika(byte[] slika) {
         this.slika = slika;
     }
 

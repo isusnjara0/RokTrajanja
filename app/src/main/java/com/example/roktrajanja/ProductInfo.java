@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -36,7 +37,8 @@ public class ProductInfo extends AppCompatActivity {
             mnaziv.setText(c.getString(c.getColumnIndex("naziv")));
             mdatum.setText(c.getString(c.getColumnIndex("datum")));
             mkolicina.setText(c.getString(c.getColumnIndex("kolicina")));
-           // mslika.setImageURI(c.getString(c.getColumnIndex("slika")));
+            byte[] slk = c.getBlob(c.getColumnIndex("slika"));
+            mslika.setImageBitmap(BitmapFactory.decodeByteArray(slk,0,slk.length));
 
         }
 
@@ -58,6 +60,7 @@ public class ProductInfo extends AppCompatActivity {
         Intent i = new Intent(getApplicationContext(), Add.class);
         i.putExtra("EditId",mId);
         startActivity(i);
+        finish();
 
     }
 }

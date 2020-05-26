@@ -36,7 +36,7 @@ public class List extends AppCompatActivity {
 
         if(c.getCount()>0) {
             while (c.moveToNext()){
-                listItem.add(new Proizvod(R.drawable.add,c.getString(1),"2 dana"));
+                listItem.add(new Proizvod( c.getInt(0),c.getBlob(4),c.getString(1),c.getString(3)));
                 MyCustomAdapter mAdaper = new MyCustomAdapter(getApplicationContext(), R.layout.my_listview_item , listItem);
 
                 listView.setAdapter(mAdaper);
@@ -47,13 +47,6 @@ public class List extends AppCompatActivity {
 
         c.close();
         db.close();
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                }
-
-        });
 
 
 

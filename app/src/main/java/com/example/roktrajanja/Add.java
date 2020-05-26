@@ -4,12 +4,16 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 
+import android.app.AlarmManager;
 import android.app.DatePickerDialog;
+import android.app.PendingIntent;
 import android.content.ContentValues;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -20,7 +24,9 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import java.io.ByteArrayOutputStream;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
@@ -31,6 +37,8 @@ public class Add extends AppCompatActivity implements DatePickerDialog.OnDateSet
     Spinner sp;
     Uri imageUri;
     int mId;
+    long id;
+    boolean edt;
     public static final int REQUEST_CAMERA = 101;
     public static final int PICK_IMAGE = 100;
     @Override
@@ -44,6 +52,8 @@ public class Add extends AppCompatActivity implements DatePickerDialog.OnDateSet
         iv = findViewById(R.id.datePicker);
         sp = findViewById(R.id.spinner2);
 
+        mslika.setImageResource(R.drawable.def);
+
         iv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -52,7 +62,7 @@ public class Add extends AppCompatActivity implements DatePickerDialog.OnDateSet
             }
         });
 
-        if(getIntent().getIntExtra("EditId",0)!=0){
+        if(edt=(getIntent().getIntExtra("EditId",0)!=0)){
             mId = getIntent().getIntExtra("EditId",0);
             getData();
         }
@@ -68,23 +78,61 @@ public class Add extends AppCompatActivity implements DatePickerDialog.OnDateSet
     public void add(View v){
         DatabaseHelper databaseHelper = new DatabaseHelper(this);
         SQLiteDatabase db = databaseHelper.getWritableDatabase();
+
+        //pretvaranje slike u byte
+        Bitmap bitmap = ((BitmapDrawable) mslika.getDrawable()).getBitmap();
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] imageInByte = baos.toByteArray();
+
         ContentValues korisnikValues = new ContentValues();
         korisnikValues.put("naziv", mnaziv.getText().toString());
         korisnikValues.put("datum", mdatum.getText().toString());
         korisnikValues.put("kolicina", mkolicina.getText().toString()+" "+sp.getSelectedItem().toString());
-      //  korisnikValues.put("slika", mslika.getPath);
+        korisnikValues.put("slika", imageInByte);
 
         if(!mnaziv.getText().toString().equals("") && !mdatum.getText().toString().equals("") && !mkolicina.getText().toString().equals("")){
-            db.insert("PROIZVOD", null, korisnikValues);
-            Toast.makeText(this, "Proizvod dodan!", Toast.LENGTH_SHORT).show();
+            if(edt){
+                String[] whereArgs = new String[]{String.valueOf(mId)};
+                id = db.update("PROIZVOD",korisnikValues,"id=?",whereArgs);
+                Toast.makeText(this, "Proizvod uređen!", Toast.LENGTH_SHORT).show();
+            }
+            else{
+                id = db.insert("PROIZVOD", null, korisnikValues);
+                Toast.makeText(this, "Proizvod dodan!", Toast.LENGTH_SHORT).show();
+            }
+
+
         }
         else{
             Toast.makeText(this, "Proizvod nije dodan!", Toast.LENGTH_SHORT).show();
         }
         // insertiraj redak
         // prekini konekciju na bazu
+
+
         db.close();
+
+        //alarm
+        notification();
+
+
         finish();
+    }
+
+    private void notification() {
+        final SharedPreferences sharedPreferences = getSharedPreferences("postavke", MODE_PRIVATE);
+
+
+        Intent intent = new Intent(getApplicationContext(), ReminderBroadcast.class);
+        intent.putExtra("notificationId",id);
+        intent.putExtra("todo","Proizvodu "+mnaziv.getText().toString()+ " ističe rok za "+ sharedPreferences.getInt("spinner",0) +" dana");
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(),0,intent,0);
+
+        PomKalendar pk = new PomKalendar(mdatum.getText().toString(), sharedPreferences.getString("time",""), sharedPreferences.getInt("spinner", 0));
+
+        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+        alarmManager.set(AlarmManager.RTC_WAKEUP,pk.getCalendar().getTimeInMillis(),pendingIntent);
     }
 
     public void update(View v){

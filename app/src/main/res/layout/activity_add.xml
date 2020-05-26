@@ -114,8 +114,8 @@
             android:id="@+id/slikaImg"
             android:layout_width="80dp"
             android:layout_height="80dp"
-
-            android:src="@color/colorPrimary" />
+            android:src="@android:drawable/gallery_thumb"
+            app:srcCompat="@android:drawable/gallery_thumb" />
 
         <ImageView
             android:id="@+id/foto"

@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">RokTrajanja</string>
     <array name="dani">
+        <item>isti dan</item>
         <item>1 dan</item>
         <item>2 dana</item>
         <item>3 dana</item>

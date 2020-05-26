@@ -44,22 +44,4 @@ public class MainActivity extends AppCompatActivity {
         startActivity(i);
     }
 
-    public void notification(View v){
-        Toast.makeText(this, "Podsjetnik podešen!", Toast.LENGTH_SHORT).show();
-
-        Intent intent = new Intent(getApplicationContext(), ReminderBroadcast.class);
-        intent.putExtra("notificationId",1);
-        intent.putExtra("todo","proizvod kokoš istice za 10 dana");
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(),0,intent,0);
-
-        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-
-        long timeAtButtonClick = System.currentTimeMillis();
-
-        long tenSeconds = 1000 * 10;
-
-        alarmManager.set(AlarmManager.RTC_WAKEUP, timeAtButtonClick +  tenSeconds, pendingIntent);
-
-    }
-
 }
