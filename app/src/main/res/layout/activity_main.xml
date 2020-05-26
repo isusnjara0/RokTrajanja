@@ -50,13 +50,5 @@
         android:background="#FFFFFF"
         android:src="@drawable/settings"/>
 
-    <EditText
-        android:id="@+id/seekBar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/settings"
-        android:layout_marginStart="0dp"
-        android:layout_centerHorizontal="true"
-        />
 
 </RelativeLayout>

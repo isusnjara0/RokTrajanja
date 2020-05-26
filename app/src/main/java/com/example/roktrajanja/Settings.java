@@ -4,9 +4,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 
 import android.app.AlarmManager;
+import android.app.AlertDialog;
 import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -21,6 +23,8 @@ import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TimePicker;
 import android.widget.Toast;
+
+import java.util.Calendar;
 
 public class Settings extends AppCompatActivity implements TimePickerDialog.OnTimeSetListener {
     Button btn;
@@ -70,12 +74,13 @@ public class Settings extends AppCompatActivity implements TimePickerDialog.OnTi
                         while (c.moveToNext()){
                             Intent intent = new Intent(getApplicationContext(), ReminderBroadcast.class);
                             intent.putExtra("notificationId",c.getInt(0));
-                            intent.putExtra("todo","Proizvodu "+c.getString(1)+ " ističe rok za "+ sharedPreferences.getInt("spinner",0) +" dana");
-                            PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(),0,intent,0);
+                            intent.putExtra("todo","Proizvodu "+c.getString(1)+ " istječe rok za "+ sharedPreferences.getInt("spinner",0) +" dana");
+                            PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(),0,intent,PendingIntent.FLAG_CANCEL_CURRENT);
                             PomKalendar pk = new PomKalendar(c.getString(3),sharedPreferences.getString("time",""),sharedPreferences.getInt("spinner",0));
 
                             AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-                            alarmManager.set(AlarmManager.RTC_WAKEUP,pk.getCalendar().getTimeInMillis(),pendingIntent);
+                            System.out.println(pk.getCalendar().get(Calendar.DAY_OF_MONTH)+"."+pk.getCalendar().get(Calendar.MONTH)+"."+pk.getCalendar().get(Calendar.YEAR)+" "+pk.getCalendar().get(Calendar.HOUR)+":"+pk.getCalendar().get(Calendar.MINUTE));
+                            alarmManager.set(AlarmManager.RTC_WAKEUP,pk.getCalendarMinusDays().getTimeInMillis(),pendingIntent);
                         }
                     }
                 }
@@ -84,8 +89,8 @@ public class Settings extends AppCompatActivity implements TimePickerDialog.OnTi
                         while (c.moveToNext()){
                             Intent intent = new Intent(getApplicationContext(), ReminderBroadcast.class);
                             intent.putExtra("notificationId",c.getInt(0));
-                            intent.putExtra("todo","Proizvodu "+c.getString(1)+ " ističe rok za "+ sharedPreferences.getInt("spinner",0) +" dana");
-                            PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(),0,intent,0);
+                            intent.putExtra("todo","Proizvodu "+c.getString(1)+ " istječe rok za "+ sharedPreferences.getInt("spinner",0) +" dana");
+                            PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(),0,intent,PendingIntent.FLAG_CANCEL_CURRENT);
                             PomKalendar pk = new PomKalendar(c.getString(3),sharedPreferences.getString("time",""),sharedPreferences.getInt("spinner",0));
 
                             AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
@@ -115,8 +120,20 @@ public class Settings extends AppCompatActivity implements TimePickerDialog.OnTi
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
         et.setText(hourOfDay+":"+minute);
     }
+    public void showAlert(View v){
+        new AlertDialog.Builder(this)
+                .setTitle("Jeste li sigurni?")
+                .setMessage("Baza će se izbrisati!")
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener(){
+                    public void onClick(DialogInterface dialog, int whichButton){
+                        izbrisiBazu();
+                    }
+                })
+                .setNegativeButton(android.R.string.no, null).show();
+    }
 
-    public void izbrisiBazu(View v){
+    public void izbrisiBazu(){
         DatabaseHelper databaseHelper = new DatabaseHelper(this);
         SQLiteDatabase db = databaseHelper.getWritableDatabase();
         db.execSQL("DELETE FROM PROIZVOD");
