@@ -38,12 +38,12 @@ public class List extends AppCompatActivity {
             while (c.moveToNext()){
                 listItem.add(new Proizvod( c.getInt(0),c.getBlob(4),c.getString(1),c.getString(3)));
                 MyCustomAdapter mAdaper = new MyCustomAdapter(getApplicationContext(), R.layout.my_listview_item , listItem);
-
                 listView.setAdapter(mAdaper);
 
 
 
-            }}else{
+            }
+        }
 
         c.close();
         db.close();
@@ -52,6 +52,5 @@ public class List extends AppCompatActivity {
 
 
 
-
 }
-}}
+}

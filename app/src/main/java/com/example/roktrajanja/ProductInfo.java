@@ -53,7 +53,9 @@ public class ProductInfo extends AppCompatActivity {
         DatabaseHelper databaseHelper = new DatabaseHelper(this);
         SQLiteDatabase db = databaseHelper.getReadableDatabase();
         db.execSQL("delete from PROIZVOD where id ="+mId);
-        finish();
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
     }
 
     public void edit(View v){

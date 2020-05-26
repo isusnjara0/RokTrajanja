@@ -15,10 +15,14 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 public class MyCustomAdapter extends ArrayAdapter<Proizvod> {
     Context mCtx;
@@ -51,9 +55,13 @@ public class MyCustomAdapter extends ArrayAdapter<Proizvod> {
         Calendar cal = Calendar.getInstance();
         Calendar day = Calendar.getInstance();
         try {
+            String d = cal.get(Calendar.DAY_OF_MONTH)+"."+(1+cal.get(Calendar.MONTH))+"."+cal.get(Calendar.YEAR);
+            cal.setTime(new SimpleDateFormat("dd.MM.yyyy").parse(d));
             day.setTime(new SimpleDateFormat("dd.MM.yyyy").parse(proizvod.datum));
             if(day.after(cal)){
-                datum.setText(day.get(Calendar.DAY_OF_MONTH)-(cal.get(Calendar.DAY_OF_MONTH))+" d");
+                long msDiff = day.getTimeInMillis() - cal.getTimeInMillis();
+                System.out.println(msDiff);
+                datum.setText(TimeUnit.MILLISECONDS.toDays(msDiff) +" d");
             }
             else{
                 datum.setText("ISTEKLO");
@@ -74,8 +82,8 @@ public class MyCustomAdapter extends ArrayAdapter<Proizvod> {
                 intent.putExtra("id", id);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 getContext().startActivity(intent);
-                ((Activity) mCtx).finish();
-                getContext().startActivity(((Activity) mCtx).getIntent());
+                //((Activity) mCtx).finish();
+                //getContext().startActivity(((Activity) mCtx).getIntent());
             }
 
         });

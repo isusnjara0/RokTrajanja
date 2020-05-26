@@ -13,6 +13,7 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -28,7 +29,10 @@ import java.io.ByteArrayOutputStream;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 
 public class Add extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
@@ -73,6 +77,7 @@ public class Add extends AppCompatActivity implements DatePickerDialog.OnDateSet
         mnaziv.setText("");
         mdatum.setText("");
         mkolicina.setText("");
+        mslika.setImageResource(R.drawable.def);
     }
 
     public void add(View v){
@@ -116,8 +121,9 @@ public class Add extends AppCompatActivity implements DatePickerDialog.OnDateSet
         //alarm
         notification();
 
-
-        finish();
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
     }
 
     private void notification() {
@@ -162,11 +168,6 @@ public class Add extends AppCompatActivity implements DatePickerDialog.OnDateSet
         startActivityForResult(camera, REQUEST_CAMERA);
     }
 
-    /*public String getPath(Uri uri){
-        if(uri==null)return null;
-        String[] projection = {MediaStore.Images.Media.DATA};
-        Cursor cursor =
-    }*/
 
     public void getData(){
         DatabaseHelper databaseHelper = new DatabaseHelper(this);
@@ -176,7 +177,13 @@ public class Add extends AppCompatActivity implements DatePickerDialog.OnDateSet
             c.moveToFirst();
             mnaziv.setText(c.getString(c.getColumnIndex("naziv")));
             mdatum.setText(c.getString(c.getColumnIndex("datum")));
-            mkolicina.setText(c.getString(c.getColumnIndex("kolicina")));
+            String[] kol = c.getString(c.getColumnIndex("kolicina")).split(" ");
+            mkolicina.setText(kol[0]);
+            List<String> ab = Arrays.asList(getResources().getStringArray(R.array.jedinica));
+            int position = ab.indexOf(kol[1]);
+            sp.setSelection(position);
+            byte[] slk = c.getBlob(c.getColumnIndex("slika"));
+            mslika.setImageBitmap(BitmapFactory.decodeByteArray(slk,0,slk.length));
         }
         db.close();
 
