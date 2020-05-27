@@ -75,7 +75,7 @@ public class Settings extends AppCompatActivity implements TimePickerDialog.OnTi
                             Intent intent = new Intent(getApplicationContext(), ReminderBroadcast.class);
                             intent.putExtra("notificationId",c.getInt(0));
                             intent.putExtra("todo","Proizvodu "+c.getString(1)+ " istječe rok za "+ sharedPreferences.getInt("spinner",0) +" dana");
-                            PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(),0,intent,PendingIntent.FLAG_CANCEL_CURRENT);
+                            PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(),c.getInt(0),intent,PendingIntent.FLAG_CANCEL_CURRENT);
                             PomKalendar pk = new PomKalendar(c.getString(3),sharedPreferences.getString("time",""),sharedPreferences.getInt("spinner",0));
 
                             AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
@@ -90,7 +90,7 @@ public class Settings extends AppCompatActivity implements TimePickerDialog.OnTi
                             Intent intent = new Intent(getApplicationContext(), ReminderBroadcast.class);
                             intent.putExtra("notificationId",c.getInt(0));
                             intent.putExtra("todo","Proizvodu "+c.getString(1)+ " istječe rok za "+ sharedPreferences.getInt("spinner",0) +" dana");
-                            PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(),0,intent,PendingIntent.FLAG_CANCEL_CURRENT);
+                            PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(),c.getInt(0),intent,PendingIntent.FLAG_CANCEL_CURRENT);
                             PomKalendar pk = new PomKalendar(c.getString(3),sharedPreferences.getString("time",""),sharedPreferences.getInt("spinner",0));
 
                             AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);

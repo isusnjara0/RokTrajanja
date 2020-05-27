@@ -133,7 +133,7 @@ public class Add extends AppCompatActivity implements DatePickerDialog.OnDateSet
         Intent intent = new Intent(getApplicationContext(), ReminderBroadcast.class);
         intent.putExtra("notificationId",id);
         intent.putExtra("todo","Proizvodu "+mnaziv.getText().toString()+ " istječe rok za "+ sharedPreferences.getInt("spinner",0) +" dana");
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(),0,intent,PendingIntent.FLAG_CANCEL_CURRENT);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(),(int)id,intent,PendingIntent.FLAG_CANCEL_CURRENT);
 
         PomKalendar pk = new PomKalendar(mdatum.getText().toString(), sharedPreferences.getString("time",""), sharedPreferences.getInt("spinner", 0));
 
